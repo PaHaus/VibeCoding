@@ -6,6 +6,9 @@ import litellm
 # Načtení proměnných ze souboru .env
 load_dotenv()
 
+# Potlačení informačních výpisů z LiteLLM
+litellm.suppress_debug_info = True
+
 # 1. Funkce a jejich nástroje
 def add(a: float, b: float) -> float:
     return a + b
@@ -79,8 +82,9 @@ tools_schema = [
 
 # 2. Agent třída využitím LiteLLM
 class LiteLLMMathAgent:
-    def __init__(self, model: str = "openrouter/meta-llama/llama-3.3-70b-instruct:free"):
+    def __init__(self, model: str = "openrouter/google/gemini-3.5-flash-lite"):
         # LiteLLM vyžaduje prefix 'openrouter/' pro OpenRouter modely
+        # Pouzity gemini-flash model, kvuli rate limitu
         self.model = model
         self.messages = [
             {
@@ -145,3 +149,6 @@ if __name__ == "__main__":
 
     print("\n--- Test 2: Navázání v paměti ---")
     print(agent.chat("Vyděl tento výsledek číslem 2."))
+
+    print("\n--- Test 3: Dotaz bez matematických operací ---")
+    print(agent.chat("Jaké bude zítra počasí v Praze?"))    
